@@ -4,6 +4,7 @@ import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { CommonModule } from './common/common.module.js';
 import { UserModule } from './user/user.module.js';
+import { ProductsModule } from './products/products.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -18,6 +19,7 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       serviceId: 'api_project',
     }),
     CommonModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
