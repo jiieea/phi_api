@@ -18,7 +18,6 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       serviceId: 'api_project',
     }),
     CommonModule,
-    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
