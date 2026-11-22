@@ -8,6 +8,19 @@ datasource db {
   provider = "postgresql"
 }
 
+enum ROLE {
+  USER
+  ADMIN
+}
+
+model Profile {
+  id  String @id @db.Uuid
+  username  String?
+  phone String?
+  role ROLE @default(USER)
+  createdAt DateTime @default(now())
+}
+
 model Category {
   id       String     @id @default(uuid())
   name     String

@@ -7,6 +7,7 @@ import { UserModule } from './user/user.module.js';
 import { ProductsModule } from './products/products.module.js';
 import { PrismaService } from './prisma/prisma.service.js';
 import { PrismaModule } from './prisma/prisma.module.js';
+import { SupabaseService } from './supabase/supabase.service.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -23,6 +24,6 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     CommonModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, SupabaseService],
 })
 export class AppModule {}
