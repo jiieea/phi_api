@@ -51,13 +51,19 @@ export class ProductsService {
       where: { id },
       data: {
         ...data,
+        // if variants sent , the old data should be deleted and update with the new one
         ...(variants && { variants: { deleteMany: {}, create: variants } }),
       },
       include: { variants: true },
     });
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} product`;
+  // soft delete , the removed data still exist in DB , the old order still reference this product
+  async remove(id: string) {
+    await this.findOne(id); // get the product
+    return this.prismaService.products.update({
+      where: { id },
+      data: { isActive: false },
+    });
   }
 }

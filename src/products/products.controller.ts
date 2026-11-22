@@ -28,12 +28,14 @@ export class ProductsController {
   @Post('/create')
   @HttpCode(HttpStatus.CREATED)
   create(@Body() createProductDto: CreateProductDto) {
+    this.logger.info("Create Product Endpoint running...")
     return this.productsService.create(createProductDto);
   }
 
   // Get Product Enpoint
   @Get()
   findAll(@Query('categoryId') categoryId?: string) {
+    this.logger.info("Get Product enpoint running...")
     return this.productsService.findAll(categoryId);
   }
 
@@ -45,11 +47,13 @@ export class ProductsController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
+    this.logger.info("Update Endpoint runnig...");
     return this.productsService.update(id, updateProductDto);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
+    this.logger.info("Remove Endpoint runnig...");
     return this.productsService.remove(id);
   }
 }
