@@ -5,6 +5,8 @@ import { AppService } from './app.service.js';
 import { CommonModule } from './common/common.module.js';
 import { UserModule } from './user/user.module.js';
 import { ProductsModule } from './products/products.module.js';
+import { PrismaService } from './prisma/prisma.service.js';
+import { PrismaModule } from './prisma/prisma.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -19,7 +21,6 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
       serviceId: 'api_project',
     }),
     CommonModule,
-    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

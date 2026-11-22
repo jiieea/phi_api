@@ -1,26 +1,63 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto.js';
 import { UpdateProductDto } from './dto/update-product.dto.js';
+import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
+import { Logger } from 'winston';
+import { PrismaService } from '../prisma/prisma.service.js';
 
 @Injectable()
 export class ProductsService {
-  create(createProductDto: CreateProductDto) {
-    return 'This action adds a new product';
+  constructor(
+    private readonly prismaService: PrismaService,
+    @Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,
+  ) {}
+
+  // create new product , extract variants and spread data product,
+  // don't have to map each property of createProductDTO
+  create({ variants, ...data }: CreateProductDto) {
+    this.logger.info('creating new  product');
+    return this.prismaService.products.create({
+      data: { ...data, variants: variants ? { create: variants } : undefined },
+      include: { variants: true },
+    });
   }
 
-  findAll() {
-    return `This action returns all products`;
+  // get all products by categoryId (optional) ,
+  findAll(categoryId?: string) {
+    this.logger.info('find all  products');
+    return this.prismaService.products.findMany({
+      where: { isActive: true, ...(categoryId && { categoryId }) },
+      include: { categories: true, variants: true },
+      orderBy: { name: 'asc' },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} product`;
+  async findOne(id: string) {
+    this.logger.info('find spesific product with id ');
+    const product = await this.prismaService.products.findUnique({
+      where: { id },
+      include: { categories: true, variants: true },
+    });
+    if (!product) {
+      throw new NotFoundException(`Product with id ${id} not found.`);
+    }
+
+    return product;
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-    return `This action updates a #${id} product`;
+  async update(id: string, { variants, ...data }: UpdateProductDto) {
+    await this.findOne(id);
+    return this.prismaService.products.update({
+      where: { id },
+      data: {
+        ...data,
+        ...(variants && { variants: { deleteMany: {}, create: variants } }),
+      },
+      include: { variants: true },
+    });
   }
 
-  remove(id: number) {
+  remove(id: string) {
     return `This action removes a #${id} product`;
   }
 }

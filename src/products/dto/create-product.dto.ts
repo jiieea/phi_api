@@ -6,22 +6,22 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-class VariantDTO {
-  @IsString() label: String;
-  @IsNumber() priceDelta: number;
+
+export class VariantDTO {
+  @IsString() label: string;
+  @IsOptional() @IsNumber() price_delta?: number;
 }
 
 export class CreateProductDto {
-  @IsString() productId: string;
+  @IsString() categoryId: string;
   @IsString() name: string;
-  @IsNumber() basePrice: number;
-  @IsString() description: string;
-  @IsString() imageUrl: string;
+  @IsNumber() base_price: number;
+  @IsOptional() @IsString() description?: string;
+  @IsString() image: string;
+
+  @IsOptional()
   @IsArray()
-  @ValidateNested()
-  @IsOptional({
-    each: true,
-  })
+  @ValidateNested({ each: true })
   @Type(() => VariantDTO)
-  variants: VariantDTO[];
+  variants?: VariantDTO[];
 }
