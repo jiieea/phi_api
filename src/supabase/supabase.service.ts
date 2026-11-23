@@ -8,12 +8,7 @@ export class SupabaseService {
     constructor() {
         const url = process.env.SUPABASE_URL;
         const key = process.env.SUPABASE_KEY;
-
-        if (!url || !key) {
-            throw new Error("Supabase Key or url is missing")
-        }
-
-
+        if (!url || !key) throw new Error("Supabase Key or url is missing")
         this.client = createClient(url, key, {
             auth: { persistSession: true, autoRefreshToken: true }
         })

@@ -3,11 +3,8 @@ import { createObserveModule } from '@nestjs/observe';
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { CommonModule } from './common/common.module.js';
-import { UserModule } from './user/user.module.js';
-import { ProductsModule } from './products/products.module.js';
-import { PrismaService } from './prisma/prisma.service.js';
-import { PrismaModule } from './prisma/prisma.module.js';
-import { SupabaseService } from './supabase/supabase.service.js';
+import { MeController } from './me/me.controller.js';
+import { AuthModule } from './auth/auth.module.js';
 
 export const { ObserveModule, ObserveInstrument } = createObserveModule();
 
@@ -24,6 +21,6 @@ export const { ObserveModule, ObserveInstrument } = createObserveModule();
     CommonModule,
   ],
   controllers: [AppController],
-  providers: [AppService, SupabaseService],
+  providers: [AppService],
 })
 export class AppModule {}

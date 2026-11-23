@@ -6,11 +6,12 @@ import {
 } from '@nestjs/common';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { PrismaService } from '../prisma/prisma.service.js';
+import { SupabaseService } from '../supabase/supabase.service.js';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
   constructor(
-    private supabaseClient: SupabaseClient,
+    private supabaseService: SupabaseService,
     private prisma: PrismaService,
   ) {}
   async canActivate(context: ExecutionContext) {
@@ -21,7 +22,7 @@ export class JwtAuthGuard implements CanActivate {
     // throw unanthorized if token not found (user not login)
     if (!token) throw new UnauthorizedException();
 
-    const { data, error } = await this.supabaseClient.auth.getUser(token);
+    const { data, error } = await this.supabaseService.client.auth.getUser(token);
     if (!data.user || error) throw new UnauthorizedException();
 
     req.user = await this.prisma.profile.findUnique({

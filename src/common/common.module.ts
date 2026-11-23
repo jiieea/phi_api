@@ -5,11 +5,15 @@ import * as winston from 'winston';
 import { ConfigModule } from '@nestjs/config';
 import { PrismaModule } from '../prisma/prisma.module.js';
 import { ProductsModule } from '../products/products.module.js';
+import { SupabaseModule } from '../supabase/supabase.module.js';
+import { AuthModule } from '../auth/auth.module.js';
 
 @Module({
   imports: [
     UserModule,
     PrismaModule,
+    SupabaseModule,
+    AuthModule,
     ProductsModule,
     WinstonModule.forRoot({
       level: 'debug',
