@@ -17,6 +17,7 @@ Content-Type: application/json
 GET {{api}}/me
 Authorization: Bearer {{token}}
 
+
 ### 3. Log out (this session only)
 POST {{sb}}/auth/v1/logout?scope=local
 apikey: {{key}}
