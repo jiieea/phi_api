@@ -6,7 +6,7 @@ POST {{sb}}/auth/v1/token?grant_type=password
 apikey: {{key}}
 Content-Type: application/json
 
-{ "email": "yves@gmail.com", "password": "yves123456" }
+{ "email": "constantine_15@gmail.com", "password": "user123" }
 
 > {%
   client.global.set("token", response.body.access_token);
