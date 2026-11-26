@@ -17,21 +17,23 @@ export class JwtAuthGuard implements CanActivate {
     private prisma: PrismaService,
   ) {}
   async canActivate(context: ExecutionContext) {
-    // get request
+    // get request from headers
     const req = context.switchToHttp().getRequest();
+    // extract token
     const [scheme, token] = (req.headers.authorization ?? '')
       .trim()
       .split(/\s+/);
+    // validate header format
     if (scheme?.toLowerCase() !== 'bearer' || !token) {
       throw new UnauthorizedException('Missing token');
     }
+    // verify token with supabase
     const { data, error } =
       await this.supabaseService.client.auth.getUser(token);
     if (!data.user || error) {
       this.logger.info(error);
       throw new UnauthorizedException();
     }
-    this.logger.info(data.user.id);
     const profile = await this.prisma.profile.findUnique({
       where: { id: data.user.id },
     });
