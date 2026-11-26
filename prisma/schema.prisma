@@ -13,11 +13,38 @@ enum ROLE {
   ADMIN
 }
 
+enum PROMOTYPE {
+  FIXED
+  PERCENTAGE
+}
+
+enum PROMOTIONRULE {
+  NEWMEMBER
+  WEEKDAY
+  DATE_RANGE // for special days
+}
+
+model Promotions {
+  id           String        @id @default(uuid())
+  name         String
+  type         PROMOTYPE
+  value        Int // PERCENTAGE  10 = 10% , FIXED 5000  = Rp.5000
+  rule         PROMOTIONRULE
+  weekday      Int? // 1 = monday  7 = sunday
+  startsAt     DateTime?
+  endsAt       DateTime?
+  newMembersAt Int? // member new for N days (default 30)
+  maxDiscount  Int? // cap for discounts percentage
+  minSubTotal  Int?
+  isActive     Boolean       @default(true)
+  createdAt    DateTime      @default(now())
+}
+
 model Profile {
-  id  String @id @db.Uuid
+  id        String   @id @db.Uuid
   username  String?
-  phone String?
-  role ROLE @default(USER)
+  phone     String?
+  role      ROLE     @default(USER)
   createdAt DateTime @default(now())
 }
 
