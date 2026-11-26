@@ -1,0 +1,38 @@
+@sb = https://vvrrxhtebxbbubkrhsox.supabase.co
+@api = http://localhost:3000
+
+### 1. Sign in
+POST {{sb}}/auth/v1/token?grant_type=password
+apikey: {{key}}
+Content-Type: application/json
+
+{ "email": "constantine_15@gmail.com", "password": "user123" }
+
+> {%
+  client.global.set("token", response.body.access_token);
+  client.global.set("refresh", response.body.refresh_token);
+%}
+
+### 2. Call your API with the token
+GET {{api}}/me
+Authorization: Bearer {{token}}
+
+
+### 3. Log out (this session only)
+POST {{sb}}/auth/v1/logout?scope=local
+apikey: {{key}}
+Authorization: Bearer {{token}}
+
+### 4. Try to refresh with the old refresh token
+POST {{sb}}/auth/v1/token?grant_type=refresh_token
+apikey: {{key}}
+Content-Type: application/json
+
+{ "refresh_token": "{{refresh}}" }
+
+### 5. Wrong password
+POST {{sb}}/auth/v1/token?grant_type=password
+apikey: {{key}}
+Content-Type: application/json
+
+{ "email": "{{email}}", "password": "wrong-password" }
