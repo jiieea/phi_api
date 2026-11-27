@@ -14,11 +14,13 @@ export type DiscountInput = {
 };
 
 export type DiscountContext = {
-  subTotal: number;
+  subTotal: number; // total items price
   now: Date;
   memberSince: Date; // profile.cretedAt
   paidOrderCount: number; // paid orders so far
 };
+
+// determine what day today , 1 = monday , 7 = sunday
 const WIB_OFFSET_MS = 7 * 60 * 60 * 1000; //Jakarta is UTC+7, no daylight saving
 export const isoWeekDayWIB = (d: Date): number => {
   const day = new Date(d.getDate() + WIB_OFFSET_MS).getUTCDay(); // 0 = Sunday
@@ -43,7 +45,7 @@ export const applies = (
         context.now <= p.endsAt
       );
     case 'NEWMEMBER':
-      const days = p.newMemberDays ?? 30;
+      const days = p.newMemberDays ?? 30; // default 30
       const ageMs = context.now.getTime() - context.memberSince.getTime();
       return context.paidOrderCount === 0 && ageMs <= days * 86_400_000;
   }
